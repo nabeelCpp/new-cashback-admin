@@ -60,7 +60,10 @@ const AddNewMember = () => {
   const [phonecode, setPhonecode] = useState(null)
   const [telephone, setTelephone] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
-
+  // states for buttons and user id information from backend
+  const [submitButton, setSubmitButton] = useState(false)
+  const [userIdDetails, setUserIdDetails] = useState(null)
+  const [userIdDetailsError, setUserIdDetailsError] = useState(false)
   //----------
   //  Hooks
   //----------
@@ -161,6 +164,30 @@ const AddNewMember = () => {
       }
     })
   }
+  // sponsor information from backend and then set sponsor value
+  const sponsorHandler = (e) => {
+    let value = e.target.value
+    if(value){
+      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/controlpanel/checkuser/${value}`, {
+        headers: {
+          "Authorization": `Bearer ${localStorage.accessToken}`
+        }
+      })
+        .then(response => {
+         setUserIdDetails(response.data.name)
+         setUserIdDetailsError(false)
+         setSubmitButton(true)
+        })
+        .catch(error => {
+          setUserIdDetails('')
+          setUserIdDetailsError(true)
+          setSubmitButton(false)
+          if (error.response && error.response.status == 401) {
+            auth.logout();
+          }
+        })
+    }
+  }
 
   //----------
   //  JSX
@@ -183,10 +210,24 @@ const AddNewMember = () => {
                 xs={6}
                 fullWidth
                 label='Sponsor Information'
-                onChange={e => setSponsorId(e.target.value)}
+                onChange={e => {
+                  setSponsorId(e.target.value)
+                  if(e.target.value == ''){
+                    setSubmitButton(false)
+                    setUserIdDetailsError('')
+                    setUserIdDetails('')
+                  }
+                }}
+                onBlur={sponsorHandler}
                 value={sponsorId}
                 placeholder='Sponsor ID'
               />
+              {userIdDetails&&<Typography variant='p' sx={{ color: 'success.main' }}>
+                {userIdDetails} is your sponsor !
+              </Typography>}
+              {userIdDetailsError&&<Typography variant='p' sx={{ color: 'red' }}>
+                Invalid User Id
+              </Typography>}
             </Grid>
             <Grid item md={6} xs={12}>
               <FormControl xs={6} fullWidth>
@@ -205,7 +246,7 @@ const AddNewMember = () => {
               <TextField
                 xs={6}
                 fullWidth
-                label='Create Login Information'
+                label='Enter User Name'
                 onChange={e => setUsername(e.target.value)}
                 value={username}
                 placeholder='Enter User Name'
@@ -337,7 +378,7 @@ const AddNewMember = () => {
             </Grid>
 
             <Grid item xs={12}>
-              <Button variant='contained' sx={{ mr: 2 }} onClick={submitProfileHandler}>
+              <Button variant='contained' sx={{ mr: 2 }} onClick={submitProfileHandler} disabled={!submitButton}>
                 Register
               </Button>
             </Grid>

@@ -360,6 +360,7 @@ const AddNewVendor = () => {
                 onChange={e => setUsername(e.target.value)}
                 value={username}
                 placeholder='Enter Username'
+                required={true}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -370,6 +371,7 @@ const AddNewVendor = () => {
                 onChange={e => setPassword(e.target.value)}
                 value={password}
                 placeholder='Enter Password'
+                required={true}
               />
             </Grid>
             <Grid item xs={12}>
@@ -396,6 +398,7 @@ const AddNewVendor = () => {
                 onChange={e => setCompanyRegistrationNo(e.target.value)}
                 value={companyRegistrationNo}
                 placeholder='Company Registration Number'
+                required={true}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -406,6 +409,7 @@ const AddNewVendor = () => {
                 onChange={e => setCompanyName(e.target.value)}
                 value={companyName}
                 placeholder='Company Name/Business Name'
+                required={true}
               />
             </Grid>
             <Grid item xs={12}>
@@ -416,6 +420,7 @@ const AddNewVendor = () => {
                 placeholder='Email address'
                 onChange={e => setEmail(e.target.value)}
                 value={email}
+                required={true}
               />
             </Grid>
             <Grid item md={6} xs={12}>
@@ -427,6 +432,7 @@ const AddNewVendor = () => {
                     id='demo-simple-select'
                     label='Country'
                     placeholder='Select Country'
+                    required={true}
                     onChange={handleCountryChange}
                   >
                     {countries.map(c => (
@@ -483,6 +489,7 @@ const AddNewVendor = () => {
                 disabled
                 onChange={e => setPhonecode(e.target.value)}
                 value={phonecode}
+                required={true}
               />
             </Grid>
             <Grid item md={4} xs={9}>
@@ -492,6 +499,7 @@ const AddNewVendor = () => {
                 onChange={e => setTelephone(e.target.value)}
                 value={telephone}
                 placeholder='Enter Mobile Phone'
+                required={true}
               />
             </Grid>
             <Grid item md={6} xs={12}>

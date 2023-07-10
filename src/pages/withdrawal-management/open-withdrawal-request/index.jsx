@@ -111,6 +111,29 @@ const OpenWithdrawalRequest = () => {
     current: 1 // Initial current page
   })
   const [searchedText, setSearchedText] = useState('')
+  // for check boxes records.
+  const [selectedRowKeys, setSelectedRowKeys] = useState([])
+
+  // code for check boxes functionality
+  const onSelectChange = (newSelectedRowKeys) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    let selected = []
+    newSelectedRowKeys.map( key => {
+      return data.filter((d, k) => {
+        if(k == key){
+          selected.push(d.id)
+        }
+      })
+    } )
+    setSelectedRowKeys(newSelectedRowKeys);
+    setSelectedRows(selected)
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const hasSelected = selectedRowKeys.length > 0;
 
   //----------
   //  Hooks
@@ -362,6 +385,7 @@ const OpenWithdrawalRequest = () => {
           />
           <Table
             columns={columns}
+            rowSelection={rowSelection}
             dataSource={data}
             loading={tableLoading}
             sortDirections={sorter}
