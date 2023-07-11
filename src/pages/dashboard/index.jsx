@@ -6,12 +6,17 @@ import { useEffect, useState } from 'react'
 //----------
 // MUI Imports
 //----------
-import { Grid, Avatar, Card, Typography, CardContent } from '@mui/material'
+import { Grid, Avatar, Card, Typography, CardContent,Tooltip } from '@mui/material'
 
 //----------
 // Other library Imports
 //----------
-import { ComposableMap, Geographies, Geography } from 'react-simple-maps'
+import {
+  Marker,
+  ComposableMap,
+  Geographies,
+  Geography
+} from "react-simple-maps";
 import { toast } from 'react-hot-toast'
 import Highcharts from 'highcharts'
 import axios from 'axios'
@@ -60,11 +65,30 @@ const Dashboard = () => {
   const [categories, setCategories] = useState([])
   const [data, setData] = useState([])
   const [row, setRow] = useState([])
-
+  const [content, setContent] = useState("");
   //----------
   //  Hooks
   //----------
   const auth = useAuth()
+
+
+
+
+  const markers = [
+    {
+      markerOffset: -30,
+      name: "Buenos Aires",
+      coordinates: [-58.3816, -34.6037]
+    },
+
+    { markerOffset: 15, name: "Santiago", coordinates: [-70.6693, -33.4489] },
+  
+    { markerOffset: -30, name: "Georgetown", coordinates: [-58.1551, 6.8013] },
+   
+    { markerOffset: 15, name: "Caracas", coordinates: [-66.9036, 10.4806] },
+    { markerOffset: 15, name: "Lima", coordinates: [-77.0428, -12.0464] }
+  ];
+
 
   //----------
   //  Effects
@@ -386,33 +410,46 @@ const Dashboard = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12}>
-          {/* Card displaying Highcharts map chart */}
-          <Card component='div' sx={{ position: 'relative', mb: 7 }}>
-            <CardContent>
-              {/* Highcharts map chart */}
-              <HighchartsReact
-                highcharts={Highcharts}
-                constructorType={'mapChart'}
-                allowChartUpdate={true}
-                immutable={false}
-                updateArgs={[true, true, true]}
-                containerProps={{ className: 'chartContainer' }}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
 
         <Grid item xs={12}>
           {/* Card displaying ComposableMap */}
-          <Card component='div' sx={{ position: 'relative', mb: 7 }}>
+          <Card component='div' sx={{ position: 'relative', mb: 7, }}>
             <CardContent>
               {/* ComposableMap */}
-              <ComposableMap fill='darkslategray' stroke='gray' strokeWidth='0.1px' projectionConfig={{ scale: 140 }}>
+
+
+              <ComposableMap id='dashboard-composableMap'  fill='#DDD' stroke='white' strokeWidth='1px' projectionConfig={{ scale: 150 }}>
                 <Geographies geography={geoUrl}>
                   {({ geographies }) => geographies.map(geo => <Geography key={geo.rsmKey} geography={geo} />)}
                 </Geographies>
+                {markers.map(({ name, coordinates, markerOffset }) => (
+        <Marker key={name} coordinates={coordinates}>
+          <g
+            fill="none"
+            stroke="black"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            transform="translate(-12, -24)"
+          >
+            <circle cx="12" cy="10" r="2" />
+            <path d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z" />
+          </g>
+          <text
+            textAnchor="middle"
+            y={markerOffset}
+            style={{ fontFamily: "system-ui", fill: "red",fontWeight:"bold",fontSize:"13px"}}
+          >
+            {name}
+          </text>
+        </Marker>
+      ))}
               </ComposableMap>
+
+
+
+
+
             </CardContent>
           </Card>
         </Grid>

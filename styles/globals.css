@@ -55,7 +55,7 @@ code[class*='language-'] {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #694e4e;
 }
 ::-webkit-scrollbar-thumb:horizontal {
   background: #888;
@@ -164,4 +164,10 @@ ul,
 
 #datepicker-list .css-wb57ya-MuiFormControl-root-MuiTextField-root {
   min-width: 140px !important;
+}
+
+
+#dashboard-composableMap path:hover{
+fill: darkslategray !important;
+content: "kkk";
 }
