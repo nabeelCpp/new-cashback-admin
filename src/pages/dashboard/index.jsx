@@ -65,6 +65,7 @@ const Dashboard = () => {
   const [categories, setCategories] = useState([])
   const [data, setData] = useState([])
   const [row, setRow] = useState([])
+  const [worldWideGraph, setWorldWideGraph] = useState([])
   const [content, setContent] = useState("");
   //----------
   //  Hooks
@@ -72,22 +73,38 @@ const Dashboard = () => {
   const auth = useAuth()
 
 
+  // Api to get coordinates.
+  console.log(worldWideGraph)
+  const markers = []
+  worldWideGraph.map(w => {
+    axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${w.nicename}`)
+        .then(response => {
+          let temp = {
+            markerOffset: -30,
+            name: `${w.nicename} (${w.total})`,
+            coordinates: [response.data.lon, response.data.lat]
+          }
+          markers.push(temp)
+        }).catch(error => {
+          console.log(error)
+        })
+    
+  })
 
+  // const markers = [
+  //   {
+  //     markerOffset: -30,
+  //     name: "Buenos Aires (24)",
+  //     coordinates: ["71.247499", "30.3308401"]
+  //   },
 
-  const markers = [
-    {
-      markerOffset: -30,
-      name: "Buenos Aires",
-      coordinates: [-58.3816, -34.6037]
-    },
-
-    { markerOffset: 15, name: "Santiago", coordinates: [-70.6693, -33.4489] },
+  //   { markerOffset: 15, name: "Santiago", coordinates: [-70.6693, -33.4489] },
   
-    { markerOffset: -30, name: "Georgetown", coordinates: [-58.1551, 6.8013] },
+  //   { markerOffset: -30, name: "Georgetown", coordinates: [-58.1551, 6.8013] },
    
-    { markerOffset: 15, name: "Caracas", coordinates: [-66.9036, 10.4806] },
-    { markerOffset: 15, name: "Lima", coordinates: [-77.0428, -12.0464] }
-  ];
+  //   { markerOffset: 15, name: "Caracas", coordinates: [-66.9036, 10.4806] },
+  //   { markerOffset: 15, name: "Lima", coordinates: [-77.0428, -12.0464] }
+  // ];
 
 
   //----------
@@ -105,6 +122,7 @@ const Dashboard = () => {
           setCategories(Object.keys(response.data.graph[0].members))
           setRow(Object.values(response.data.graph[0].members))
           setData(response.data)
+          setWorldWideGraph(response.data.graph[1].world_wide_users)
         })
         .catch(error => {
           toast.error(
