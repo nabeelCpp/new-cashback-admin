@@ -64,11 +64,11 @@ const AuthProvider = ({ children }) => {
           image: response.image,
           role: 'ADMIN'
         }
+        const { returnUrl } = router.query;
         window.localStorage.setItem(authConfig.storageTokenKeyName, response.accessToken)
         localStorage.setItem('userData', JSON.stringify(user))
         cb({ success: true })
-        router.replace('/dashboard')
-        window.location.reload()
+        window.location.href = returnUrl||'/dashboard';
       })
       .catch(error => {
         if (error.response) {
